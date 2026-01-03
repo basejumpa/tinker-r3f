@@ -15,7 +15,12 @@ const SceneContents: FC<{ color: string; wireframe: boolean }> = ({ color, wiref
     <>
         <mesh>
             <boxGeometry />
-            <meshBasicMaterial color={color} wireframe={wireframe} />
+            <meshBasicMaterial color={color} wireframe={wireframe} attach="material-0" />
+            <meshBasicMaterial color="red" wireframe={wireframe} attach="material-1" />
+            <meshBasicMaterial color="green" wireframe={wireframe} attach="material-2" />
+            <meshBasicMaterial color="blue" wireframe={wireframe} attach="material-3" />
+            <meshBasicMaterial color="yellow" wireframe={wireframe} attach="material-4" />
+            <meshBasicMaterial color="magenta" wireframe={wireframe} attach="material-5" />
         </mesh>
         <Grid />
     </>
