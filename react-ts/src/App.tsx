@@ -1,10 +1,11 @@
 import './App.css';
 import type { FC, RefObject } from 'react';
-import { createRef } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { createRef, useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { View, OrbitControls, Grid, PerspectiveCamera, Text } from '@react-three/drei';
 import { Leva, useControls } from 'leva';
 import { Splitter } from 'antd';
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
 type ViewConfig = {
     id: string;
@@ -83,6 +84,30 @@ const App: FC = () => {
     ];
 
     const refs: RefObject<HTMLElement | null>[] = views.map(() => createRef<HTMLElement>());
+    const controlsRefB = useRef<OrbitControlsImpl>(null);
+    const controlsRefC = useRef<OrbitControlsImpl>(null);
+    const syncInProgress = useRef<'b' | 'c' | null>(null);
+
+    const handleOrbitChange = (source: 'b' | 'c') => {
+        // If a sync is already in progress from the other control, ignore this event
+        if (syncInProgress.current && syncInProgress.current !== source) {
+            return;
+        }
+
+        const sourceControls = source === 'b' ? controlsRefB.current : controlsRefC.current;
+        const targetControls = source === 'b' ? controlsRefC.current : controlsRefB.current;
+
+        if (sourceControls && targetControls) {
+            const sourceAngle = sourceControls.getAzimuthalAngle();
+
+            syncInProgress.current = source;
+            targetControls.setAzimuthalAngle(sourceAngle);
+            // Use setTimeout to clear the flag after the event loop completes
+            setTimeout(() => {
+                syncInProgress.current = null;
+            }, 0);
+        }
+    };
 
     return (
         <>
@@ -124,17 +149,21 @@ const App: FC = () => {
                         <SceneContents color={color} wireframe={wireframe} />
                         {view.id === 'b' ? (
                             <OrbitControls
+                                ref={controlsRefB}
                                 enableRotate={true}
                                 minPolarAngle={0}
                                 maxPolarAngle={0}
                                 enablePan={false}
+                                onChange={() => handleOrbitChange('b')}
                             />
                         ) : view.id === 'c' ? (
                             <OrbitControls
+                                ref={controlsRefC}
                                 enableRotate={true}
                                 minPolarAngle={Math.PI / 2}
                                 maxPolarAngle={Math.PI / 2}
                                 enablePan={false}
+                                onChange={() => handleOrbitChange('c')}
                             />
                         ) : (
                             <OrbitControls />
