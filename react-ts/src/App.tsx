@@ -88,12 +88,12 @@ const App: FC = () => {
         <>
             <div className="app">
                 <Splitter>
-                    <Splitter.Panel defaultSize="50%" min="20%" max="80%">
+                    <Splitter.Panel min="30%" max="70%">
                         <div className="view" ref={refs[0]}>
                             <div className="view__label">{views[0].label}</div>
                         </div>
                     </Splitter.Panel>
-                    <Splitter.Panel>
+                    <Splitter.Panel defaultSize="calc((100vh - 1.5rem) / 2)" min="200px">
                         <Splitter layout="vertical">
                             <Splitter.Panel>
                                 <div className="view" ref={refs[1]}>
