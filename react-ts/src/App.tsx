@@ -2,7 +2,7 @@ import './App.css';
 import type { FC } from 'react';
 import { createRef } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { View, OrbitControls, Grid } from '@react-three/drei';
+import { View, OrbitControls, Grid, PerspectiveCamera } from '@react-three/drei';
 import { Leva, useControls } from 'leva';
 
 type ViewConfig = {
@@ -73,13 +73,12 @@ const App: FC = () => {
                 <color attach="background" args={['#0b0c12']} />
                 {views.map((view, index) => (
                     <View key={view.id} track={refs[index]}>
+                        <PerspectiveCamera makeDefault position={view.cameraPosition} />
                         <color attach="background" args={['#0b0c12']} />
                         <SceneContents color={color} wireframe={wireframe} />
                         <OrbitControls
-                            makeDefault
                             enableDamping
                             target={[0, 0, 0]}
-                            camera-position={view.cameraPosition}
                         />
                     </View>
                 ))}
