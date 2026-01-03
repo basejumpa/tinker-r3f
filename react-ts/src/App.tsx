@@ -2,7 +2,7 @@ import './App.css';
 import type { FC, RefObject } from 'react';
 import { createRef } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { View, OrbitControls, Grid, PerspectiveCamera } from '@react-three/drei';
+import { View, OrbitControls, Grid, PerspectiveCamera, Text } from '@react-three/drei';
 import { Leva, useControls } from 'leva';
 
 type ViewConfig = {
@@ -22,6 +22,30 @@ const SceneContents: FC<{ color: string; wireframe: boolean }> = ({ color, wiref
             <meshBasicMaterial color="yellow" wireframe={wireframe} attach="material-4" />
             <meshBasicMaterial color="magenta" wireframe={wireframe} attach="material-5" />
         </mesh>
+        {/* X+ (right face) */}
+        <Text position={[0.51, 0, 0]} rotation={[0, Math.PI / 2, 0]} fontSize={0.3} color="white">
+            X+
+        </Text>
+        {/* X- (left face) */}
+        <Text position={[-0.51, 0, 0]} rotation={[0, -Math.PI / 2, 0]} fontSize={0.3} color="white">
+            X-
+        </Text>
+        {/* Y+ (top face) */}
+        <Text position={[0, 0.51, 0]} rotation={[-Math.PI / 2, 0, 0]} fontSize={0.3} color="white">
+            Y+
+        </Text>
+        {/* Y- (bottom face) */}
+        <Text position={[0, -0.51, 0]} rotation={[Math.PI / 2, 0, 0]} fontSize={0.3} color="white">
+            Y-
+        </Text>
+        {/* Z+ (front face) */}
+        <Text position={[0, 0, 0.51]} fontSize={0.3} color="white">
+            Z+
+        </Text>
+        {/* Z- (back face) */}
+        <Text position={[0, 0, -0.51]} rotation={[0, Math.PI, 0]} fontSize={0.3} color="white">
+            Z-
+        </Text>
         <Grid />
     </>
 );
