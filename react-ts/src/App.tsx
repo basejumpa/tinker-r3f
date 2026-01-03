@@ -6,6 +6,7 @@ import { View, OrbitControls, Grid, PerspectiveCamera, Text } from '@react-three
 import { Leva, useControls } from 'leva';
 import { Splitter } from 'antd';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
+import { Selector } from './Selector';
 
 type ViewConfig = {
     id: string;
@@ -15,7 +16,11 @@ type ViewConfig = {
 
 const SceneContents: FC<{ color: string; wireframe: boolean }> = ({ color, wireframe }) => (
     <>
-        <mesh>
+        <mesh
+            onClick={(e) => {
+                console.log('Box clicked at:', e.point);
+            }}
+        >
             <boxGeometry />
             <meshBasicMaterial color={color} wireframe={wireframe} attach="material-0" />
             <meshBasicMaterial color="red" wireframe={wireframe} attach="material-1" />
@@ -48,6 +53,7 @@ const SceneContents: FC<{ color: string; wireframe: boolean }> = ({ color, wiref
         <Text position={[0, 0, -0.51]} rotation={[0, Math.PI, 0]} fontSize={0.3} color="white">
             Z-
         </Text>
+        <Selector />
         <Grid />
     </>
 );
@@ -119,7 +125,7 @@ const App: FC = () => {
                         </div>
                     </Splitter.Panel>
                     <Splitter.Panel defaultSize="calc((100vh - 1.5rem) / 2)" min="200px">
-                        <Splitter layout="vertical">
+                        <Splitter orientation="vertical">
                             <Splitter.Panel>
                                 <div className="view" ref={refs[1]}>
                                     <div className="view__label">{views[1].label}</div>
@@ -166,7 +172,7 @@ const App: FC = () => {
                                 onChange={() => handleOrbitChange('c')}
                             />
                         ) : (
-                            <OrbitControls />
+                            <OrbitControls enableDamping />
                         )}
                     </View>
                 ))}
