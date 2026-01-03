@@ -60,7 +60,7 @@ const App: FC = () => {
         },
         wireframe: {
             label: 'Wireframe',
-            value: true,
+            value: false,
         },
     });
 
@@ -68,7 +68,7 @@ const App: FC = () => {
         {
             id: 'a',
             label: 'A',
-            cameraPosition: [5, 0, 0],
+            cameraPosition: [0, 0, -5],
         },
         {
             id: 'b',
@@ -78,7 +78,7 @@ const App: FC = () => {
         {
             id: 'c',
             label: 'C',
-            cameraPosition: [0, 0, 5],
+            cameraPosition: [5, 0, 0],
         },
     ];
 
