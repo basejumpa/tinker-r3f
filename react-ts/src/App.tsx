@@ -1,8 +1,7 @@
 import './App.css';
 import type { FC } from 'react';
-import { useEffect } from 'react';
-import { Canvas, useThree } from '@react-three/fiber';
-import { OrbitControls, Grid } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Grid, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import { Leva, useControls } from 'leva';
 
 
@@ -28,6 +27,9 @@ const App: FC = () => {
                 </mesh>
                 <Grid />
                 <OrbitControls />
+                <GizmoHelper>
+                    <GizmoViewport />
+                </GizmoHelper>
             </Canvas>
             <Leva />
         </>
