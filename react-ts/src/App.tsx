@@ -122,7 +122,23 @@ const App: FC = () => {
                         <PerspectiveCamera makeDefault position={view.cameraPosition} />
                         <color attach="background" args={['#0b0c12']} />
                         <SceneContents color={color} wireframe={wireframe} />
-                        <OrbitControls />
+                        {view.id === 'b' ? (
+                            <OrbitControls
+                                enableRotate={true}
+                                minPolarAngle={0}
+                                maxPolarAngle={0}
+                                enablePan={false}
+                            />
+                        ) : view.id === 'c' ? (
+                            <OrbitControls
+                                enableRotate={true}
+                                minPolarAngle={Math.PI / 2}
+                                maxPolarAngle={Math.PI / 2}
+                                enablePan={false}
+                            />
+                        ) : (
+                            <OrbitControls />
+                        )}
                     </View>
                 ))}
             </Canvas>
