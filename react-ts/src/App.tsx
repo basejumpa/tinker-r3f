@@ -1,5 +1,5 @@
 import './App.css';
-import type { FC } from 'react';
+import type { FC, RefObject } from 'react';
 import { createRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { View, OrbitControls, Grid, PerspectiveCamera } from '@react-three/drei';
@@ -36,23 +36,23 @@ const App: FC = () => {
 
     const views: ViewConfig[] = [
         {
-            id: 'iso',
-            label: 'Isometric',
-            cameraPosition: [4, 3, 4],
+            id: 'a',
+            label: 'A',
+            cameraPosition: [5, 0, 0],
         },
         {
-            id: 'front',
-            label: 'Front',
-            cameraPosition: [0, 2, 6],
+            id: 'b',
+            label: 'B',
+            cameraPosition: [0, 5, 0],
         },
         {
-            id: 'top',
-            label: 'Top',
-            cameraPosition: [0, 6, 0],
+            id: 'c',
+            label: 'C',
+            cameraPosition: [0, 0, 5],
         },
     ];
 
-    const refs = views.map(() => createRef<HTMLDivElement>());
+    const refs: RefObject<HTMLElement | null>[] = views.map(() => createRef<HTMLElement>());
 
     return (
         <>
@@ -76,10 +76,7 @@ const App: FC = () => {
                         <PerspectiveCamera makeDefault position={view.cameraPosition} />
                         <color attach="background" args={['#0b0c12']} />
                         <SceneContents color={color} wireframe={wireframe} />
-                        <OrbitControls
-                            enableDamping
-                            target={[0, 0, 0]}
-                        />
+                        <OrbitControls />
                     </View>
                 ))}
             </Canvas>
