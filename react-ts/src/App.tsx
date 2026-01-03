@@ -1,20 +1,14 @@
 import './App.css';
 import type { FC } from 'react';
-import { useMemo } from 'react';
+import { createRef } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Grid } from '@react-three/drei';
+import { View, OrbitControls, Grid } from '@react-three/drei';
 import { Leva, useControls } from 'leva';
-import { Vector3 } from 'three';
 
 type ViewConfig = {
     id: string;
     label: string;
     cameraPosition: [number, number, number];
-};
-
-type ViewProps = ViewConfig & {
-    color: string;
-    wireframe: boolean;
 };
 
 const SceneContents: FC<{ color: string; wireframe: boolean }> = ({ color, wireframe }) => (
@@ -26,24 +20,6 @@ const SceneContents: FC<{ color: string; wireframe: boolean }> = ({ color, wiref
         <Grid />
     </>
 );
-
-const View: FC<ViewProps> = ({ id, label, cameraPosition, color, wireframe }) => {
-    const camera = useMemo(
-        () => ({ position: new Vector3(...cameraPosition) }),
-        [cameraPosition],
-    );
-
-    return (
-        <div className="view" key={id}>
-            <div className="view__label">{label}</div>
-            <Canvas className="view__canvas" camera={camera}>
-                <color attach="background" args={["#0b0c12"]} />
-                <SceneContents color={color} wireframe={wireframe} />
-                <OrbitControls enableDamping target={[0, 0, 0]} />
-            </Canvas>
-        </div>
-    );
-};
 
 const App: FC = () => {
     const { color, wireframe } = useControls({
@@ -76,13 +52,39 @@ const App: FC = () => {
         },
     ];
 
+    const refs = views.map(() => createRef<HTMLDivElement>());
+
     return (
-        <div className="app">
-            {views.map((view) => (
-                <View key={view.id} {...view} color={color} wireframe={wireframe} />
-            ))}
-            <Leva collapsed />
-        </div>
+        <>
+            <div className="app">
+                {views.map((view, index) => (
+                    <div className="view" key={view.id} ref={refs[index]}>
+                        <div className="view__label">{view.label}</div>
+                    </div>
+                ))}
+                <Leva collapsed />
+            </div>
+            <Canvas
+                className="canvas"
+                style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
+                eventSource={document.getElementById('root')!}
+                eventPrefix="client"
+            >
+                <color attach="background" args={['#0b0c12']} />
+                {views.map((view, index) => (
+                    <View key={view.id} track={refs[index]}>
+                        <color attach="background" args={['#0b0c12']} />
+                        <SceneContents color={color} wireframe={wireframe} />
+                        <OrbitControls
+                            makeDefault
+                            enableDamping
+                            target={[0, 0, 0]}
+                            camera-position={view.cameraPosition}
+                        />
+                    </View>
+                ))}
+            </Canvas>
+        </>
     );
 };
 
