@@ -4,6 +4,7 @@ import { createRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { View, OrbitControls, Grid, PerspectiveCamera, Text } from '@react-three/drei';
 import { Leva, useControls } from 'leva';
+import { Splitter } from 'antd';
 
 type ViewConfig = {
     id: string;
@@ -86,11 +87,27 @@ const App: FC = () => {
     return (
         <>
             <div className="app">
-                {views.map((view, index) => (
-                    <div className="view" key={view.id} ref={refs[index]}>
-                        <div className="view__label">{view.label}</div>
-                    </div>
-                ))}
+                <Splitter>
+                    <Splitter.Panel defaultSize="50%" min="20%" max="80%">
+                        <div className="view" ref={refs[0]}>
+                            <div className="view__label">{views[0].label}</div>
+                        </div>
+                    </Splitter.Panel>
+                    <Splitter.Panel>
+                        <Splitter layout="vertical">
+                            <Splitter.Panel>
+                                <div className="view" ref={refs[1]}>
+                                    <div className="view__label">{views[1].label}</div>
+                                </div>
+                            </Splitter.Panel>
+                            <Splitter.Panel>
+                                <div className="view" ref={refs[2]}>
+                                    <div className="view__label">{views[2].label}</div>
+                                </div>
+                            </Splitter.Panel>
+                        </Splitter>
+                    </Splitter.Panel>
+                </Splitter>
                 <Leva collapsed />
             </div>
             <Canvas
